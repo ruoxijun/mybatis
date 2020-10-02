@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 头文件(mapper.xml的头部声明) -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 绑定Mapper.xml对应的Mapper接口类 -->
+<mapper namespace="io.github.io.github.ruoxijun.mapper.UserMapper">
+    <!-- id：此结果映射集的id
+    type：表字段对应的字段类(pojo类) -->
+    <resultMap id="userMap" type="userPojo">
+        <!-- 对于字段名和成员变量同名的字段可以不用配置默认即可 -->
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <!-- column：数据库字段名
+        property：映射到此类指定的变量 -->
+        <result column="age" property="a"/>
+    </resultMap>
+
+    <!-- select 查询：
+    id 对应接口中的方法名
+    resultType 每条查询结果封装的类型
+    标签内为查询语句 -->
+<!--    <select id="getUserList" resultType="userPojo" >-->
+<!--        select * from user-->
+<!--    </select>-->
+
+<!--    <select id="getUserList" resultType="userPojo" >-->
+<!--        select id,name,age as a from user-->
+<!--    </select>-->
+
+    <select id="getUserList" resultMap="userMap" >
+        select * from user
+    </select>
+    <select id="getUserLimit" resultMap="userMap" parameterType="map">
+        select * from user limit #{startIndex},#{pageSize}
+    </select>
+</mapper>

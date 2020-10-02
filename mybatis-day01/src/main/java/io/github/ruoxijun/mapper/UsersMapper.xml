@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--绑定Mapper.xml对应的接口-->
+<mapper namespace="io.github.io.github.ruoxijun.mapper.UsersMapper">
+    <!-- select 查询：
+    id对应接口中的方法名
+    resultType每条查询结果封装的类型
+    标签内为查询语句 -->
+    <select id="getUserList" resultType="io.github.io.github.ruoxijun.data.User">
+        select * from user
+    </select>
+    <!-- parameterType 代表传入参数的类型
+     查询语句中增加条件，利用 #{参数(变量)名} 的方式调用参数 -->
+    <select id="getUserById" parameterType="int" resultType="io.github.io.github.ruoxijun.data.User">
+        select * from user where id=#{id}
+    </select>
+
+    <!-- parameterType中声明传入一个字段对象类型作为参数
+      因为字段类中设置了成员变量的get方法，
+      可直接通过 #{成员变量名} 的方式来获取具体的值 -->
+    <insert id="insertUser" parameterType="io.github.io.github.ruoxijun.data.User">
+        insert into user(id,name,age) values(#{id},#{name},#{age})
+    </insert>
+
+    <update id="updateUser" parameterType="io.github.io.github.ruoxijun.data.User">
+        update user set name=#{name},age=#{age} where id=#{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+        delete from user where id=#{id}
+    </delete>
+
+    <update id="updateUser2" parameterType="map">
+        update user set name=#{userName} where id=#{userId}
+    </update>
+
+    <select id="findNameList" parameterType="string" resultType="io.github.io.github.ruoxijun.data.User">
+        select * from user where name like "%"#{name}"%"
+    </select>
+</mapper>

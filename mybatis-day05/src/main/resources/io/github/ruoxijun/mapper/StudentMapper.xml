@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 头文件(mapper.xml的头部声明) -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 绑定Mapper.xml对应的Mapper接口类 -->
+<mapper namespace="io.github.ruoxijun.mapper.StudentMapper">
+    <!-- 1.书写多表查询SQL语句 -->
+    <select id="getStudentsList" resultMap="studentMap">
+        select s.id id,s.name name,t.id tid,t.name tname
+        from student s,teacher t
+        where s.tid=t.id
+    </select>
+    <!-- 2.设置结果集 -->
+    <resultMap id="studentMap" type="student">
+        <!-- 因为是多表查询所以所有的字段都需要映射到指定成员变量上 -->
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <!-- 设置成员对象对应的结果集
+        property：指定那个成员对象（成员对象变量名）
+        javaType：对象的类型 -->
+        <association property="teacher" javaType="teacher">
+            <!-- 设置对应的结果集到该对象对应的成员变量上 -->
+            <result property="id" column="tid"/>
+            <result property="name" column="tname"/>
+        </association>
+    </resultMap>
+
+
+<!--    &lt;!&ndash; 1.查询学生表，并设置结果集 &ndash;&gt;-->
+<!--    <select id="getStudentsList" resultMap="studentMap">-->
+<!--        select * from student-->
+<!--    </select>-->
+<!--    &lt;!&ndash; 2.配置结果集为学生类 &ndash;&gt;-->
+<!--    <resultMap id="studentMap" type="student">-->
+<!--        &lt;!&ndash; id和name默认即可不用配置 &ndash;&gt;-->
+<!--        &lt;!&ndash; association：当实体类成员变量为对象时使用-->
+<!--             column：对应查询的字段-->
+<!--             property：对应的成员对象-->
+<!--             javaType：指定该成员对象的java类型(这里使用的类型别名)-->
+<!--             select：插入子查询 &ndash;&gt;-->
+<!--        <association column="tid" property="teacher" javaType="teacher" select="getTeachersList"/>-->
+<!--    </resultMap>-->
+<!--    &lt;!&ndash; 3.作为子查询查询老师表，查询条件为父查询的tid值 &ndash;&gt;-->
+<!--    <select id="getTeachersList" resultType="teacher">-->
+<!--        select * from teacher where id=#{tid}-->
+<!--    </select>-->
+
+    <!-- sql标签：定义SQL片段
+        id：唯一标记名
+        标签内是需要复用的语句-->
+    <sql id="if-id-name">
+        <if test="id != null">or id=#{id}</if>
+        <if test="name != null">and name=#{name}</if>
+    </sql>
+    <select id="findStudents" resultType="student" parameterType="map">
+        select * from student
+        <where>
+            /* 在SQL语句中需要使用的地方通过 include 标签来引用 */
+            <include refid="if-id-name"/>
+        </where>
+    </select>
+    <update id="updateStudent" parameterType="map">
+        update student
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="tid != null">tid=#{tid},</if>
+        </set>
+        <where>
+            <if test="id !=null">id=#{id}</if>
+        </where>
+    </update>
+
+    <!-- collection：可遍历的集合
+    item：遍历集合元素时的别名
+    open：语句开始位置的值
+    close：语句接受位置的值
+    separator：每个item之间的分隔符
+    标签内为每一次遍历拼接的值 -->
+    <select id="findStuForeach" resultType="student">
+        select * from student where id in
+        <foreach collection="ids" item="id"
+                 open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 头文件(mapper.xml的头部声明) -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 绑定Mapper.xml对应的Mapper接口类 -->
+<mapper namespace="io.github.io.github.ruoxijun.mapper.UserMapper">
+    <select id="getUsersList" resultType="userPojo">
+        select * from user
+    </select>
+</mapper>

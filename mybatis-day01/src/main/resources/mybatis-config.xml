@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 核心配置文件(存放mybatis与数据库的各种配置) -->
+<configuration>
+    <!-- 环境配置组(default值表示默认环境,根据环境id选择) -->
+    <environments default="development">
+        <!-- 环境配置(id为环境名称，可自定义) -->
+        <environment id="development">
+            <!-- 事务管理(一般为JDBC，表示使用JDBC管理事务的提交和回滚) -->
+            <transactionManager type="JDBC"/>
+            <!-- 使用标准的JDBC数据源接口来配置JDBC连接对象的资源 -->
+            <dataSource type="POOLED">
+                <!--驱动-->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <!-- JDBC 连接数据库url设置：
+                设置安全连接：useSSL=false
+                设置中文可用编码：useUnicode=true
+                设置设置编码格式：characterEncoding=utf8
+                设置时区为北京：serverTimezone=GMT%2B8 -->
+                <property name="url" value="jdbc:mysql://localhost:3306/test?useSSL=false&amp;
+                useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=GMT%2B8"/>
+                <!--用户名与密码-->
+                <property name="username" value="root"/>
+                <property name="password" value="991314"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 每个Mapper的xml文件都需要在此注册 -->
+    <mappers>
+        <mapper resource="io/github/io.github.ruoxijun/mapper/UsersMapper.xml"/>
+    </mappers>
+</configuration>

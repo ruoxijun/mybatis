@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis 主配置文件：头部的声明，它用来验证 XML 文档的正确性 -->
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 核心配置文件(存放mybatis与数据库的各种配置) -->
+<configuration>
+    <properties resource="db.properties"/>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <typeAliases>
+        <typeAlias type="io.github.ruoxijun.pojo.UserPojo" alias="userPojo"/>
+    </typeAliases>
+    <!-- 环境配置组(default值表示默认环境,根据环境id选择) -->
+    <environments default="development">
+        <!-- 环境配置(id为环境名称，可自定义) -->
+        <environment id="development">
+            <!-- 事务管理(一般为JDBC，表示使用JDBC管理事务的提交和回滚) -->
+            <transactionManager type="JDBC"/>
+            <!-- 使用标准的JDBC数据源接口来配置JDBC连接对象的资源 -->
+            <dataSource type="POOLED">
+                <!--jdbc驱动-->
+                <property name="driver" value="${driver}"/>
+                <!-- JDBC 连接数据库url设置：
+                设置安全连接：useSSL=false
+                设置中文可用编码：useUnicode=true
+                设置设置编码格式：characterEncoding=utf8
+                设置时区为北京：serverTimezone=GMT%2B8 -->
+                <property name="url" value="${url}"/>
+                <!--用户名与密码-->
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 管理Mapper接口对应的Mapper.xml -->
+    <mappers>
+        <!-- 每个Mapper.xml文件都需要在此注册 -->
+        <mapper class="io.github.ruoxijun.mapper.UserMapper"/>
+    </mappers>
+</configuration>

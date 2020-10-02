@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 头文件(mapper.xml的头部声明) -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 绑定Mapper.xml对应的Mapper接口类 -->
+<mapper namespace="io.github.ruoxijun.mapper.TeacherMapper">
+    <select id="getTeachersList" resultType="teacher">
+        select * from teacher
+    </select>
+
+<!--    <select id="findTeacher" resultMap="teacherMap">-->
+<!--        select t.id tid,t.name tname,s.id sid,s.name sname-->
+<!--        from teacher t,student s-->
+<!--        where t.id=#{id} and t.id=s.tid-->
+<!--    </select>-->
+<!--    <resultMap id="teacherMap" type="teacher">-->
+<!--        <result property="id" column="tid"/>-->
+<!--        <result property="name" column="tname"/>-->
+<!--        &lt;!&ndash; collection：当成员变量为集合时使用，给集合中的元素设置结果集-->
+<!--             property：对应的集合变量名-->
+<!--             ofType：指定集合中每个元素的java类型 &ndash;&gt;-->
+<!--        <collection property="students" ofType="student">-->
+<!--            &lt;!&ndash; 为集合中元素对象做结果集映射 &ndash;&gt;-->
+<!--            <result property="id" column="sid"/>-->
+<!--            <result property="name" column="sname"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+    <select id="findTeacher" resultMap="teacherMap">
+        select * from teacher where id=#{id}
+    </select>
+    <resultMap id="teacherMap" type="teacher">
+        <!-- 因为id字段在下方被使用，默认映射被覆盖
+        在此必须指定id字段的映射否则不被赋值 -->
+        <result property="id" column="id"/>
+        <!-- collection：为集合元素指定结果集映射
+             column：传递给子查询的参数
+             property：对应的成员变量名
+             javaType：该成员变量的java类型
+             ofType：该集合元素的java类型
+             select：绑定子查询 -->
+        <collection column="id" property="students" javaType="ArrayList" ofType="student" select="getStudents"/>
+    </resultMap>
+    <!-- 子查询 -->
+    <select id="getStudents" resultType="student">
+        select * from student where tid=#{id}
+    </select>
+</mapper>
